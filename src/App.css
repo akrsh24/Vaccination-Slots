@@ -1,6 +1,8 @@
 label,
-input {
+input,
+button {
   margin: 2%;
+  width: 100%;
 }
 
 #slotTable {
@@ -25,4 +27,11 @@ th {
 
 tr:nth-child(even) {
   background-color: #dddddd;
+}
+
+@media (max-width: 767px) {
+  td,
+  th {
+    font-size: 0.5rem;
+  }
 }

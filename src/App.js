@@ -14,6 +14,17 @@ const Container = styled.main`
     align-items:center;
     flex-wrap:wrap;
 `;
+
+const FlexSection = styled.section`
+   width:33%;
+
+   @media (max-width:767px){
+     width:100%;
+     margin: 5px 0 5px 5px;
+     padding:10px 0;
+   }
+`;
+
 function App() {
 
   const [slotDate, setSlotDate] = useState(new Date());
@@ -191,7 +202,7 @@ function App() {
   return (
     <form id="form" onSubmit={handleSubmit}>
       <Container>
-        <section>
+        <FlexSection>
           <label htmlFor="dateToFind">Vaccine Date</label>
           <input
             type="date"
@@ -201,8 +212,8 @@ function App() {
             onChange={(e) => handleDate(e)}
           />
           &nbsp; &nbsp;
-        </section>
-        <section>
+        </FlexSection>
+        <FlexSection>
           <label htmlFor="pincode">Pin Code</label>
           <input
             type="number"
@@ -211,10 +222,12 @@ function App() {
             min="1"
             onChange={(e) => handlePincode(e)}
           />
-        </section>
-        <button type="submit" id="submitBtn">
-          Find
-        </button>
+        </FlexSection>
+        <FlexSection>
+          <button type="submit" id="submitBtn">
+            Find
+          </button>
+        </FlexSection>
         {
           slotData.length > 0 ?
             getSlotTable({ data: slotData })
@@ -222,7 +235,6 @@ function App() {
             getSlotTable({ data: [] })
         }
       </Container>
-
     </form>
   );
 }
