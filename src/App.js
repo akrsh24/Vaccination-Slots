@@ -13,10 +13,16 @@ const Container = styled.main`
     justify-content:center;
     align-items:center;
     flex-wrap:wrap;
+
+    @media (max-width:767px){
+      flex-direction:column;
+   }
 `;
 
 const FlexSection = styled.section`
    width:33%;
+   margin: 5px 0 5px 5px;
+   padding:10px 0;
 
    @media (max-width:767px){
      width:100%;
@@ -222,8 +228,6 @@ function App() {
             min="1"
             onChange={(e) => handlePincode(e)}
           />
-        </FlexSection>
-        <FlexSection>
           <button type="submit" id="submitBtn">
             Find
           </button>
