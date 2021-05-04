@@ -20,14 +20,16 @@ const Container = styled.main`
 `;
 
 const FlexSection = styled.section`
-   width:33%;
+   width:25%;
    margin: 5px 0 5px 5px;
    padding:10px 0;
 
    @media (max-width:767px){
      width:100%;
-     margin: 5px 0 5px 5px;
-     padding:10px 0;
+   }
+
+   @media (min-width:767px) and (max-width:1023px){
+     width:33%;
    }
 `;
 
