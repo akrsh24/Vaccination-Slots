@@ -20,7 +20,7 @@ th {
   border: 1px solid #dddddd;
   text-align: left;
   padding: 8px;
-  font-size: 2vw;
+  font-size: 0.8rem;
 }
 
 tr:nth-child(even) {
