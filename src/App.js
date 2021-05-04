@@ -4,9 +4,10 @@ import styled from 'styled-components';
 import './App.css';
 
 const Container = styled.main`
-    margin: 20vh 5vw;
+    margin: 10vh 5vw;
     padding:1%;
     border:1px solid black;
+    width:90vw;
 
     display:flex;
     justify-content:center;
