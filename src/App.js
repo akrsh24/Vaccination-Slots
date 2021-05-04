@@ -53,11 +53,11 @@ function App() {
     }
   }
 
-  const handleHeaderClick = ({ data, type, key }) => {
-    const sortedData = sortData({ data, type, key });
-    console.log(sortedData);
-    // setSlotData(sortedData);
-  }
+  // const handleHeaderClick = ({ data, type, key }) => {
+  //   const sortedData = sortData({ data, type, key });
+  //   console.log(sortedData);
+  //   // setSlotData(sortedData);
+  // }
 
   const getSlotTable = ({ data }) => {
     console.log("table");
