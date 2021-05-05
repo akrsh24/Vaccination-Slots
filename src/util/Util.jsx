@@ -37,6 +37,5 @@ export const AlertComponent = ({ message }) => {
 
 export const getMaxDate = ({ currentDate }) => {
     let date = moment(currentDate).add(30, 'days').calendar();
-    console.log(moment(date).format('yyyy-MM-DD'));
     return moment(date).format('yyyy-MM-DD');
 }

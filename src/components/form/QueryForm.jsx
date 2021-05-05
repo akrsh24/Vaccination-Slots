@@ -1,4 +1,4 @@
-import { Button, Radio, Select } from 'antd';
+import { Button, Input, InputNumber, Radio, Select } from 'antd';
 import moment from 'moment';
 import React, { useState } from 'react';
 import styled from 'styled-components';
@@ -23,10 +23,6 @@ const Container = styled.section`
     justify-content:center;
     align-items:center;
     flex-wrap:wrap;
-
-    @media (max-width:767px){
-      flex-direction:column;
-   }
 `;
 
 const FlexSectionItems = styled.section`
@@ -34,35 +30,45 @@ const FlexSectionItems = styled.section`
    justify-content:center;
    align-items:center;
    text-align:center;
+   flex-wrap:wrap;
 
    width:50%;
-   /* margin: 5px 0 5px 5px; */
    padding:10px 0;
 
    @media (max-width:767px){
      width:100%;
+     flex-direction:row;
+     justify-content:space-evenly;
+     align-items:flex-start;
+     text-align:center;
    }
 
-   @media (min-width:767px) and (max-width:1023px){
-     width:33%;
-   }
 `;
 
 const Label = styled.label`
     margin:2%;
 `;
 
-const Input = styled.input`
-    margin:2%;
+const StyledForm = styled.form`
+    width:100%;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    flex-wrap:wrap;
+     
 `;
 
 const StyledButton = styled(Button)`
     margin:2%;
 `;
 
+let tempInputValue = "";
+
 const QueryForm = () => {
     const [slotDate, setSlotDate] = useState(new Date());
-    const [pincodes, setPincode] = useState(0);
+    const [pincodes, setPincode] = useState("");
     const [stateValue, setStateValue] = useState("");
     const [district, setDistrict] = useState('');
 
@@ -138,9 +144,13 @@ const QueryForm = () => {
         setSlotDate(date);
     }
 
-    const handlePincode = ({ target }) => {
-        const userPincode = target.value;
-        setPincode(+ userPincode);
+    const onBlur = () => {
+        setPincode(tempInputValue);
+    }
+
+    const handlePincode = (value) => {
+        console.log(value);
+        tempInputValue = value;
     }
 
     const handleDistrict = (value) => {
@@ -152,14 +162,14 @@ const QueryForm = () => {
         setStateValue(value);
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleSubmit = () => {
+        let userPincode = + pincodes;
         let formattedDate = moment(slotDate).format('DD-MM-YYYY');
         if (filterType === 'pincode') {
-            if (pincodes < 1 && (pincodes.toString).length !== 6)
+            if (userPincode < 1 && (userPincode.toString).length !== 6)
                 alert("Enter valid pincode and date");
-            else if (slotDate && pincodes)
-                findSlots({ dateToFind: formattedDate, key: pincodes, type: "pincode" });
+            else if (slotDate && userPincode)
+                findSlots({ dateToFind: formattedDate, key: userPincode, type: "pincode" });
         }
         else {
             if (!district.length)
@@ -173,66 +183,16 @@ const QueryForm = () => {
         return (
             <FlexSectionItems>
                 <Label htmlFor="pincode">Pin Code</Label>
-                <Input
-                    type="number"
-                    name="pincode"
-                    id="pincode"
-                    min="1"
-                    onChange={(e) => handlePincode(e)}
+                <InputNumber
+                    id="pincodeInput"
+                    onChange={handlePincode}
+                    value={pincodes}
+                    key="pincodeInput"
+                    onBlur={onBlur}
+                    style={{
+                        width: "75%"
+                    }}
                 />
-                <StyledButton type="primary" onClick={handleSubmit}>
-                    Search
-                </StyledButton>
-            </FlexSectionItems>
-        )
-    }
-
-    const DistrictFilterForm = () => {
-        console.log(districtList);
-        return (
-            <FlexSectionItems>
-                <Label htmlFor="state">State</Label>
-                <Select
-                    showSearch
-                    value={stateValue}
-                    style={{ width: 200 }}
-                    placeholder="Select a state"
-                    optionFilterProp="children"
-                    onChange={handleStateValue}
-                    filterOption={(input, option) =>
-                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                    }
-                >
-                    {
-                        stateList?.states && stateList?.states.map(state => {
-                            return <Option key={state.state_id}>{state.state_name}</Option>
-                        })
-                    }
-                </Select>
-                {
-                    <>
-                        <Label htmlFor="district">District</Label>
-                        <Select
-                            showSearch
-                            style={{ width: 200 }}
-                            value={district}
-                            placeholder="Select a district"
-                            optionFilterProp="children"
-                            onChange={handleDistrict}
-                            filterOption={(input, option) =>
-                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                            }
-                            disabled={!stateValue.length}
-                        >
-                            {
-                                districtList?.districts && districtList?.districts.map(districtObj => {
-                                    return <Option key={districtObj.district_id}>{districtObj.district_name}</Option>
-                                })
-                            }
-
-                        </Select>
-                    </>
-                }
                 <StyledButton type="primary" onClick={handleSubmit}>
                     Search
                 </StyledButton>
@@ -240,15 +200,67 @@ const QueryForm = () => {
         )
     }
 
+    const DistrictFilterForm = () => {
+        console.log(districtList);
+        return (
+            <>
+                <FlexSectionItems>
+                    <Label htmlFor="state">State</Label>
+                    <Select
+                        showSearch
+                        value={stateValue}
+                        style={{ width: '75%', marginBottom: "10px", textAlign: 'right' }}
+                        placeholder="Select a state"
+                        optionFilterProp="children"
+                        onChange={handleStateValue}
+                        filterOption={(input, option) =>
+                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }
+                    >
+                        {
+                            stateList?.states && stateList?.states.map(state => {
+                                return <Option key={state.state_id}>{state.state_name}</Option>
+                            })
+                        }
+                    </Select>
+                </FlexSectionItems>
+                <FlexSectionItems>
+                    <Label htmlFor="district">District</Label>
+                    <Select
+                        showSearch
+                        style={{ width: '75%' }}
+                        value={district}
+                        placeholder="Select a district"
+                        optionFilterProp="children"
+                        onChange={handleDistrict}
+                        filterOption={(input, option) =>
+                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }
+                        disabled={!stateValue.length}
+                    >
+                        {
+                            districtList?.districts && districtList?.districts.map(districtObj => {
+                                return <Option key={districtObj.district_id}>{districtObj.district_name}</Option>
+                            })
+                        }
+
+                    </Select>
+                </FlexSectionItems>
+                <StyledButton type="primary" onClick={handleSubmit}>
+                    Search
+                </StyledButton>
+            </>
+        )
+    }
+
     const FilterTypeForm = () => {
         switch (filterType) {
-            case 'district': return <DistrictFilterForm />;
-            default: return <PincodeFilterForm />;
+            case "district": return <DistrictFilterForm />
+            default: return <PincodeFilterForm />
         }
     }
 
-
-    const FormItems = () => {
+    const QueryFormItems = () => {
         return (
             <>
                 <FlexSectionItems>
@@ -260,6 +272,9 @@ const QueryForm = () => {
                         value={moment(slotDate).format('yyyy-MM-DD')}
                         onChange={(e) => handleDate(e)}
                         max={getMaxDate(slotData)}
+                        style={{
+                            width: "53%"
+                        }}
                     />
                 </FlexSectionItems>
                 <FlexSectionItems>
@@ -276,9 +291,9 @@ const QueryForm = () => {
     return (
         <QueryFormContainer>
             <h1 style={{ textAlign: "center", border: "1px dashed black" }}>Slot Finder</h1>
-            <form id="form" >
+            <StyledForm name="queryForm" id="form">
                 <Container>
-                    <FormItems />
+                    <QueryFormItems />
                     <AlertComponent message="Data is available for 30 days window only" />
                     {
                         slotData.length > 0 ?
@@ -287,7 +302,7 @@ const QueryForm = () => {
                             <SlotsDataGrid slotsDetails={[]} statusMsg={statusMsg} />
                     }
                 </Container>
-            </form>
+            </StyledForm>
         </QueryFormContainer >
     );
 }
